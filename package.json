@@ -1,0 +1,19 @@
+{
+  "name": "ams-utils",
+  "version": "0.0.1",
+  "description": "Utils for AMS-Project ",
+  "main": "src/index.ts",
+  "repository": "https://github.com/aaronschweig/ams-utils",
+  "author": "Aaron Schweig <aaron.schweig@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.9.0",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.3.0",
+    "typescript": "^3.7.5"
+  }
+}
