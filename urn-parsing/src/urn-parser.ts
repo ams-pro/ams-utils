@@ -1,5 +1,11 @@
 const URN_REGEX = /(?<company>[a-z,\s]+):{?(?<ressources>[a-z,\s]+)}?:{?(?<rights>[a-z,\s]+)}?/m;
 
+/* TODOS:
+ * Merge Maps when multiple urns are given
+ * handle edgecases and provide good error preventions inside
+ * Custom AMSMap which enables easy acces to certain rights
+ */
+
 class ParsingError extends Error {
   constructor(property: string) {
     const message = `[ParsingError]: Missing property ${property} in URN`;
