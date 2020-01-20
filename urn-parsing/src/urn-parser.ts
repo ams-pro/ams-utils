@@ -21,7 +21,10 @@ function parseGlob(glob: string) {
   return glob.split(',');
 }
 
-export function parseURN(urn: string) {
+function extractScopes(
+  urn: string,
+  currentStateMap: Map<string, AMSParsedScope>
+) {
   urn = urn.replace(/\s/g, '');
   const {
     groups: { company, ressources, rights }
@@ -35,11 +38,8 @@ export function parseURN(urn: string) {
   if (!rights) {
     throw new ParsingError('rights');
   }
-
   const parsedRessources = parseGlob(ressources);
   const parsedRights = parseGlob(rights);
-
-  const result = new Map<string, AMSParsedScope>();
 
   const formatted = parsedRights.reduce(
     (prev, curr) => ({
@@ -49,7 +49,23 @@ export function parseURN(urn: string) {
     {}
   );
   for (const resource of parsedRessources) {
-    result.set(resource, formatted);
+    if (!currentStateMap.has(resource)) {
+      currentStateMap.set(resource, formatted);
+      continue;
+    }
+    const current = currentStateMap.get(resource);
+    currentStateMap.set(resource, { ...current, ...formatted });
   }
+}
+
+export function parseURN(urn: string | string[]): Map<string, AMSParsedScope> {
+  const result = new Map<string, AMSParsedScope>();
+  if (Array.isArray(urn)) {
+    for (const part of urn) {
+      extractScopes(part, result);
+    }
+    return result;
+  }
+  extractScopes(urn, result);
   return result;
 }

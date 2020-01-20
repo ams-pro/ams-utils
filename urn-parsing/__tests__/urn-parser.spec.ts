@@ -47,4 +47,19 @@ describe('Test urn-parser functionality', () => {
   });
 
   test.todo('should not parse malformed urn');
+
+  test('should parse an array of simple urns inside of a single map', () => {
+    const result = buildMapFromObject({
+      betriebsmittel: { read: true, write: true },
+      gefahrstoffe: { read: true, delete: true }
+    });
+
+    expect(
+      parseURN([
+        'ams:{betriebsmittel,gefahrstoffe}:read',
+        'ams:betriebsmittel:write',
+        'ams:gefahrstoffe:delete'
+      ])
+    ).toEqual(result);
+  });
 });
