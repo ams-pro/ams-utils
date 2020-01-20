@@ -1,5 +1,7 @@
 const URN_REGEX = /(?<company>[a-z,\s]+):{?(?<ressources>[a-z,\s]+)}?:{?(?<rights>[a-z,\s]+)}?/m;
-
+export type AMSParsedScope = {
+  [key: string]: boolean;
+};
 /* TODOS:
  * Merge Maps when multiple urns are given
  * handle edgecases and provide good error preventions inside
@@ -16,13 +18,11 @@ class ParsingError extends Error {
 }
 
 function parseGlob(glob: string) {
-  return glob
-    .trim()
-    .split(',')
-    .map(i => i.trim()); // TODO: Überarbeiten
+  return glob.split(',');
 }
 
 export function parseURN(urn: string) {
+  urn = urn.replace(/\s/g, '');
   const {
     groups: { company, ressources, rights }
   } = URN_REGEX.exec(urn);
@@ -39,7 +39,7 @@ export function parseURN(urn: string) {
   const parsedRessources = parseGlob(ressources);
   const parsedRights = parseGlob(rights);
 
-  const result = new Map<string, any>();
+  const result = new Map<string, AMSParsedScope>();
 
   const formatted = parsedRights.reduce(
     (prev, curr) => ({

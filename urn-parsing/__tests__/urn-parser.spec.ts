@@ -30,9 +30,9 @@ describe('Test urn-parser functionality', () => {
     expect(parseURN('  ams:{betriebsmittel  ,  gefahrstoffe}:write  ')).toEqual(
       result
     );
-    /* expect(parseURN('  ams:{betriebsmittel  ,  gefahrstoffe}  :write  ')).toEqual(
-      result
-    ); */ // -> Error wegen reagex hinter Klammer }
+    expect(
+      parseURN('  ams:{betriebsmittel  ,  gefahrstoffe}  :write  ')
+    ).toEqual(result);
   });
 
   test('should parse multiple entities with multiple rights', () => {
