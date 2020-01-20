@@ -3,7 +3,6 @@ export type AMSParsedScope = {
   [key: string]: boolean;
 };
 /* TODOS:
- * Merge Maps when multiple urns are given
  * handle edgecases and provide good error preventions inside
  * Custom AMSMap which enables easy acces to certain rights
  */

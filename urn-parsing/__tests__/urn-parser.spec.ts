@@ -53,7 +53,7 @@ describe('Test urn-parser functionality', () => {
       betriebsmittel: { read: true, write: true },
       gefahrstoffe: { read: true, delete: true }
     });
-
+    // Welche Variante hat prio beim serialisieren?
     expect(
       parseURN([
         'ams:{betriebsmittel,gefahrstoffe}:read',
