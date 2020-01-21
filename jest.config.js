@@ -6,5 +6,5 @@ module.exports = {
       diagnostics: false
     }
   },
-  testPathIgnorePatterns: ['helpers.ts']
+  testPathIgnorePatterns: ['helpers.ts','oidc-proc/*']
 };
