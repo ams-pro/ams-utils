@@ -1,4 +1,4 @@
-import { AMSRolesInput, serializeToUrn } from './urn-serialize';
+import { AMSRolesInput, serializeToUrn } from '../src/urn-serialize';
 
 describe('Test urn-serializer functionality', () => {
 
