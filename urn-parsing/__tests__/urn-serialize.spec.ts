@@ -12,9 +12,9 @@ describe('Test urn-serializer with urn-parser as validation', () => {
       }
     ];
 
-    const serialization = serializeToUrn(input);
+    const serialization = serializeToUrn(input).split(' ');
 
-    expect(parseURN(serialization.split(' '))).toEqual(
+    expect(parseURN(serialization)).toEqual(
       buildMapFromObject({
         betriebsmittel: { read: true, write: true }
       })
@@ -37,9 +37,9 @@ describe('Test urn-serializer with urn-parser as validation', () => {
       }
     ];
 
-    const serialization = serializeToUrn(input);
+    const serialization = serializeToUrn(input).split(' ');
 
-    expect(parseURN(serialization.split(' '))).toEqual(
+    expect(parseURN(serialization)).toEqual(
       buildMapFromObject({
         betriebsmittel: { read: true, write: true, delete: true }
       })
@@ -65,9 +65,9 @@ describe('Test urn-serializer with urn-parser as validation', () => {
         write: true
       }
     ];
-    const serialization = serializeToUrn(input);
+    const serialization = serializeToUrn(input).split(' ');
 
-    expect(parseURN(serialization.split(' '))).toEqual(
+    expect(parseURN(serialization)).toEqual(
       buildMapFromObject({
         betriebsmittel: { read: true, write: true },
         gefahrstoffe: { read: true, write: true }
@@ -93,9 +93,9 @@ describe('Test urn-serializer with urn-parser as validation', () => {
       }
     ];
 
-    const serialization2 = serializeToUrn(input2);
+    const serialization2 = serializeToUrn(input2).split(' ');
 
-    expect(parseURN(serialization2.split(' '))).toEqual(
+    expect(parseURN(serialization2)).toEqual(
       buildMapFromObject({
         betriebsmittel: { read: true },
         gefahrstoffe: { read: true },
@@ -118,18 +118,18 @@ describe('Test urn-serializer with urn-parser as validation', () => {
       }
     ];
 
-    const serialization = serializeToUrn(input);
+    const serialization = serializeToUrn(input).split(' ');
 
-    expect(parseURN(serialization.split(' '))).toEqual(
+    expect(parseURN(serialization)).toEqual(
       buildMapFromObject({
         betriebsmittel: { read: true, write: true },
         gefahrstoffe: { read: true }
       })
     );
     const input2 = [...input, { module: 'gefahrstoffe', delete: true }];
-    const serialization2 = serializeToUrn(input2);
+    const serialization2 = serializeToUrn(input2).split(' ');
 
-    expect(parseURN(serialization2.split(' '))).toEqual(
+    expect(parseURN(serialization2)).toEqual(
       buildMapFromObject({
         gefahrstoffe: { read: true, delete: true },
         betriebsmittel: { read: true, write: true }
