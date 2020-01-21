@@ -16,44 +16,92 @@ export type AMSRolesInput = {
   module: string;
   read?: boolean;
   write?: boolean;
+};
+
+function serializeToGlob(object: AMSReadWrite | string) {
+  if (Object.keys(object).length > 1) {
+    return JSON.stringify(object).replace(/(true|"|:|\s)/g, '');
+  }
+  return JSON.stringify(object).replace(/(true|"|:|{|}|\s)/g, '');
 }
 
-const serializeToGlob = (object: AMSReadWrite) => JSON.stringify(object).replace(/(true|"|:)/g, '');
-
 export function serializeToUrn(roles: AMSRolesInput[]): string {
-
-  const array = [];
-  roles.reduce((prev, curr) => {
-
-    const value = {
-      read: curr.read || false,
-      write: curr.write || false
-    }
+  // transform input array to roles-map
+  const parsed = roles.reduce((prev, curr) => {
+    const value = {};
+    Object.keys(curr).forEach(asd => {
+      if (asd === 'module') {
+        return;
+      }
+      value[asd] = curr[asd] || false;
+    });
 
     if (prev.has(curr.module)) {
-
       const prevMapValue = prev.get(curr.module);
 
-      if (prevMapValue.read || value.read || curr.read) {
-        value.read = true
-      }
-      if (prevMapValue.write || value.write || curr.write) {
-        value.write = true
-      }
+      Object.keys(prevMapValue).forEach(roleKey => {
+        if (prevMapValue[roleKey] || value[roleKey] || curr[roleKey]) {
+          value[roleKey] = true;
+        }
+      });
     }
 
-    prev.set(curr.module, value)
+    prev.set(curr.module, value);
     return prev;
-  },
-    new Map<string, AMSReadWrite>())
-    .forEach((val, key) => {
-      const string = 'ams:' + key + ':' + serializeToGlob(val)
-      array.push(string)
-    })
+  }, new Map<string, AMSReadWrite>());
 
-  // Collect all Keys bei denen die Werte gleich sind und fasse diese zusammen
+  const duplicatesTracker = [];
 
-  console.log(array);
+  const keyArray = [];
 
-  return array.join(' ');
+  /**
+   * Optimize duplicates with following priority:
+   * 1. Rollen und Rechte
+   * 2. Module
+   */
+  for (const [key, val] of parsed.entries()) {
+    // Remove falsy values inside of Roles-Map to minimize urn output
+    Object.keys(val).forEach(k => {
+      if (!val[k]) {
+        delete val[k];
+      }
+    });
+    // Check if current value was already present inside of Roles-Map
+    const idx = duplicatesTracker.findIndex(
+      e => JSON.stringify(e) === JSON.stringify(val)
+    );
+    if (idx !== -1) {
+      // If present append to Key-Array and append comma for later parsing
+      keyArray[idx] += key + ',';
+      // Delete from map, cause values are inserted later as a bulk urn
+      parsed.delete(key);
+      continue;
+    }
+
+    // If not present, push to duplicate-Array (later needed for Mapping as well)
+    const pusher = duplicatesTracker.push(val);
+    parsed.delete(key);
+    keyArray[pusher - 1] = (keyArray[pusher - 1] || '') + key + ',';
+  }
+
+  // Insert duplicates with respective value to Roles-Map
+  keyArray.forEach((e, index) => {
+    parsed.set(e, duplicatesTracker[index]);
+  });
+
+  const resultScopes = [];
+
+  // Transform Roles-Map into scopes
+  parsed.forEach((val, key) => {
+    // Remove trailing comma caused by always appending to merged keys
+    if (key.charAt(key.length - 1) === ',') {
+      key = key.substring(0, key.length - 1);
+    }
+    // If key is mergedKey, then transorm to glob-urn
+    if (key.includes(',')) {
+      key = `{${key}}`;
+    }
+    resultScopes.push('ams:' + key + ':' + serializeToGlob(val));
+  });
+  return resultScopes.join(' ');
 }
