@@ -26,7 +26,7 @@ function extractScopes(
 ) {
   urn = urn.replace(/\s/g, '');
   const {
-    groups: { company, ressources, rights }
+    groups: { company, ressources, rights },
   } = URN_REGEX.exec(urn);
   if (!company) {
     throw new ParsingError('company');
@@ -43,7 +43,7 @@ function extractScopes(
   const formatted = parsedRights.reduce(
     (prev, curr) => ({
       ...prev,
-      [curr]: true
+      [curr]: true,
     }),
     {}
   );
@@ -61,10 +61,13 @@ export function parseURN(urn: string | string[]): Map<string, AMSParsedScope> {
   const result = new Map<string, AMSParsedScope>();
   if (Array.isArray(urn)) {
     for (const part of urn) {
-      extractScopes(part, result);
+      if (part) {
+        extractScopes(part, result);
+      }
     }
     return result;
   }
-  extractScopes(urn, result);
+
+  urn && extractScopes(urn, result);
   return result;
 }
