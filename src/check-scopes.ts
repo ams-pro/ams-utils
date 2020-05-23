@@ -1,6 +1,6 @@
 import { AMSParsedScope, parseURN } from './urn-parser';
 
-export class AccessChecker {
+export class AccessController {
   private accessMap: Map<string, AMSParsedScope>;
 
   constructor(userScopes: string | string[]) {

@@ -2,9 +2,21 @@
   <a href="https://ams-pro.de/" target="_blank"><img src="https://ams-pro.de/_nuxt/img/18dbf82.png" width="320" alt="AMS-Pro Logo" /></a>
 </p>
 
-# AMS-Scope utilities
+# AMS-Scope Utilities
 
 Dieses Package dient dazu Scopes, welche innerhalb von AMS-Pro genutzt werden nutzbar zu machen, sodass innerhalb von Front- und Backend die Möglichkeit besteht zu überprüfen, ob ein User Zugriff (auf Basis der ihm zugewiesenen Scopes) auf eine bestimmte Ressource besitzt
+
+## Installation
+
+```bash
+yarn add @ams-pro/scope-utils
+```
+
+oder
+
+```bash
+npm i @ams-pro/scope-utils
+```
 
 ## Nutzung im Frontend (VueJs)
 
@@ -13,9 +25,9 @@ Hauptanwendungsfall im Frontend wird sein, herauszufinden, wie bestimmte Element
 #### Beispiel:
 
 ```ts
-let accessController;
+let accessController: AccessController;
 
-function useScopes() {
+export function useScopes() {
   const init = (scopes: string | string[]) => {
     if (!accessController) {
       accessController = new AccessController(scopes);
@@ -24,13 +36,13 @@ function useScopes() {
 
   return {
     can: accessController.can,
-    update: accesController.updateUserScopes,
+    update: accessController.updateUserScopes,
     init,
   };
 }
 ```
 
-Nach dem einloggen **muss** nun einmal die Funktion `useScopes().init` aufgerufen werden, damit eine `AccessController`-Instanz zur Verfügung steht.
+Nach dem einloggen **muss** nun einmal die Funktion `useScopes().init()` aufgerufen werden, damit eine `AccessController`-Instanz zur Verfügung steht.
 
 Innerhalb einer Komponente kann nun mithilfe von
 
@@ -40,10 +52,11 @@ Innerhalb einer Komponente kann nun mithilfe von
     <button :disabled="!can('ams:betriebsmittel:write')">Speichern</button>
   </div>
 </template>
+
 <script>
 export default {
   setup() {
-    const { can } = useScopes(/* Scopes */);
+    const { can } = useScopes();
 
     return { can };
   },
@@ -52,3 +65,7 @@ export default {
 ```
 
 Abgefragt werden, ob der User Zugriff hat oder nicht. Sollten sich die Scopes eines Users im Verlaufe einer Sitzung ändern (durch einloggen in eine andere Unit, o.ä.) können mithilfe von `AccessController.updateUserScopes` alle Scopes überschrieben werden.
+
+## Nutzung im Backend
+
+> Coming Soon

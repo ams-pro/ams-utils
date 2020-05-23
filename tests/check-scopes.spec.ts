@@ -1,9 +1,9 @@
-import { AccessChecker } from '../src/check-scopes';
+import { AccessController } from '../src/check-scopes';
 const USER_SCOPES = 'ams:{betriebsmittel, gefahrstoffe}:{read,write}';
 
 describe('Test Acces-Checking functionality', () => {
   test('should grant access for scope, if it is a user-scope', () => {
-    const accesController = new AccessChecker(USER_SCOPES);
+    const accesController = new AccessController(USER_SCOPES);
 
     expect(accesController.can('ams:betriebsmittel:read')).toBe(true);
 
@@ -15,7 +15,7 @@ describe('Test Acces-Checking functionality', () => {
   });
 
   test('should permit access for scope, if it is not a user-scope', () => {
-    const accesController = new AccessChecker(USER_SCOPES);
+    const accesController = new AccessController(USER_SCOPES);
 
     expect(accesController.can('ams:betriebsanweisungen:read')).toBe(false);
 
@@ -29,7 +29,7 @@ describe('Test Acces-Checking functionality', () => {
   });
 
   test('should grant access for array of scopes, if user has all of them', () => {
-    const accesController = new AccessChecker(USER_SCOPES);
+    const accesController = new AccessController(USER_SCOPES);
 
     expect(
       accesController.can([
@@ -52,7 +52,7 @@ describe('Test Acces-Checking functionality', () => {
   });
 
   test('should permit access for array of scopes, if user has not all of them (at least one is missing)', () => {
-    const accesController = new AccessChecker(USER_SCOPES);
+    const accesController = new AccessController(USER_SCOPES);
 
     expect(
       accesController.can([
@@ -65,7 +65,7 @@ describe('Test Acces-Checking functionality', () => {
 
 describe('AccessController can be updated and validates correctly all the time', () => {
   test('should be updated and handle new requests correctly', () => {
-    const accesController = new AccessChecker(USER_SCOPES);
+    const accesController = new AccessController(USER_SCOPES);
 
     expect(accesController.can('ams:betriebsmittel:read')).toBe(true);
     expect(accesController.can('ams:betriebsanweisungen:read')).toBe(false);
