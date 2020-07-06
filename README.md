@@ -4,7 +4,7 @@
 
 # AMS-Scope Utilities
 
-Dieses Package dient dazu Scopes, welche innerhalb von AMS-Pro genutzt werden nutzbar zu machen, sodass innerhalb von Front- und Backend die Möglichkeit besteht zu überprüfen, ob ein User Zugriff (auf Basis der ihm zugewiesenen Scopes) auf eine bestimmte Ressource besitzt
+Dieses Package dient dazu Scopes, welche innerhalb von AMS-Pro genutzt werden, nutzbar zu machen, sodass innerhalb von Front- und Backend die Möglichkeit besteht zu überprüfen, ob ein User Zugriff (auf Basis der ihm zugewiesenen Scopes) auf eine bestimmte Ressource besitzt.
 
 ## Installation
 

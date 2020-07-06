@@ -17,7 +17,7 @@ function transformKeyToGlob(key: string) {
 }
 
 function serializeToGlob(object: AMSReadWrite) {
-  return Object.keys(object).join(',');
+  return transformKeyToGlob(Object.keys(object).join(','));
 }
 
 export function serializeToUrn(roles: AMSRolesInput[]): string {
@@ -55,7 +55,7 @@ export function serializeToUrn(roles: AMSRolesInput[]): string {
    */
   for (const [key, val] of parsed.entries()) {
     const idx = duplicatesTracker.findIndex(
-      e => JSON.stringify(e) === JSON.stringify(val)
+      (e) => JSON.stringify(e) === JSON.stringify(val)
     );
 
     parsed.delete(key);

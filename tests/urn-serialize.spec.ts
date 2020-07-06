@@ -8,15 +8,15 @@ describe('Test urn-serializer with urn-parser as validation', () => {
       {
         module: 'betriebsmittel',
         read: true,
-        write: true
-      }
+        write: true,
+      },
     ];
 
     const serialization = serializeToUrn(input).split(' ');
 
     expect(parseURN(serialization)).toEqual(
       buildMapFromObject({
-        betriebsmittel: { read: true, write: true }
+        betriebsmittel: { read: true, write: true },
       })
     );
   });
@@ -25,23 +25,23 @@ describe('Test urn-serializer with urn-parser as validation', () => {
     const input = [
       {
         module: 'betriebsmittel',
-        read: true
+        read: true,
       },
       {
         module: 'betriebsmittel',
-        write: true
+        write: true,
       },
       {
         module: 'betriebsmittel',
-        delete: true
-      }
+        delete: true,
+      },
     ];
 
     const serialization = serializeToUrn(input).split(' ');
 
     expect(parseURN(serialization)).toEqual(
       buildMapFromObject({
-        betriebsmittel: { read: true, write: true, delete: true }
+        betriebsmittel: { read: true, write: true, delete: true },
       })
     );
   });
@@ -50,47 +50,47 @@ describe('Test urn-serializer with urn-parser as validation', () => {
     const input = [
       {
         module: 'betriebsmittel',
-        read: true
+        read: true,
       },
       {
         module: 'betriebsmittel',
-        write: true
+        write: true,
       },
       {
         module: 'gefahrstoffe',
-        read: true
+        read: true,
       },
       {
         module: 'gefahrstoffe',
-        write: true
-      }
+        write: true,
+      },
     ];
     const serialization = serializeToUrn(input).split(' ');
 
     expect(parseURN(serialization)).toEqual(
       buildMapFromObject({
         betriebsmittel: { read: true, write: true },
-        gefahrstoffe: { read: true, write: true }
+        gefahrstoffe: { read: true, write: true },
       })
     );
 
     const input2 = [
       {
         module: 'betriebsmittel',
-        read: true
+        read: true,
       },
       {
         module: 'gefahrstoffe',
-        read: true
+        read: true,
       },
       {
         module: 'gbu',
-        write: true
+        write: true,
       },
       {
         module: 'ba',
-        write: true
-      }
+        write: true,
+      },
     ];
 
     const serialization2 = serializeToUrn(input2).split(' ');
@@ -100,7 +100,7 @@ describe('Test urn-serializer with urn-parser as validation', () => {
         betriebsmittel: { read: true },
         gefahrstoffe: { read: true },
         gbu: { write: true },
-        ba: { write: true }
+        ba: { write: true },
       })
     );
   });
@@ -110,12 +110,12 @@ describe('Test urn-serializer with urn-parser as validation', () => {
       {
         module: 'betriebsmittel',
         read: true,
-        write: true
+        write: true,
       },
       {
         module: 'gefahrstoffe',
-        read: true
-      }
+        read: true,
+      },
     ];
 
     const serialization = serializeToUrn(input).split(' ');
@@ -123,7 +123,7 @@ describe('Test urn-serializer with urn-parser as validation', () => {
     expect(parseURN(serialization)).toEqual(
       buildMapFromObject({
         betriebsmittel: { read: true, write: true },
-        gefahrstoffe: { read: true }
+        gefahrstoffe: { read: true },
       })
     );
     const input2 = [...input, { module: 'gefahrstoffe', delete: true }];
@@ -132,7 +132,7 @@ describe('Test urn-serializer with urn-parser as validation', () => {
     expect(parseURN(serialization2)).toEqual(
       buildMapFromObject({
         gefahrstoffe: { read: true, delete: true },
-        betriebsmittel: { read: true, write: true }
+        betriebsmittel: { read: true, write: true },
       })
     );
   });
