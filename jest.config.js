@@ -3,8 +3,8 @@ module.exports = {
   testEnvironment: 'node',
   globals: {
     'ts-jest': {
-      diagnostics: false
-    }
+      diagnostics: false,
+    },
   },
-  testPathIgnorePatterns: ['helpers.ts','oidc-poc/*']
+  testPathIgnorePatterns: ['helpers.ts'],
 };
