@@ -63,6 +63,15 @@ describe('Test Acces-Checking functionality', () => {
   });
 });
 
+describe('should revoke access if urn is malformed', () => {
+  test('should not rhow an error but instead give a falsy result', () => {
+    const accesController = new AccessController(USER_SCOPES);
+
+    expect(accesController.can('betriebsmittel:read')).toBe(false);
+    // Alle anderen invaliden Scopes werden in den urn-parser tests überprüft
+  });
+});
+
 describe('AccessController can be updated and validates correctly all the time', () => {
   test('should be updated and handle new requests correctly', () => {
     const accesController = new AccessController(USER_SCOPES);

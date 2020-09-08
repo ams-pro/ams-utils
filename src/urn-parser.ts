@@ -7,7 +7,7 @@ export type AMSParsedScope = {
  * Custom AMSMap which enables easy acces to certain rights
  */
 
-class ParsingError extends Error {
+export class ParsingError extends Error {
   constructor(property: string) {
     const message = `[ParsingError]: Missing property ${property} in URN`;
     super(message);
@@ -25,9 +25,16 @@ function extractScopes(
   currentStateMap: Map<string, AMSParsedScope>
 ) {
   urn = urn.replace(/\s/g, '');
+  /* const {
+    groups: { company, ressources, rights },
+  } = URN_REGEX.exec(urn); */
+  const parsed = URN_REGEX.exec(urn);
+  if (!parsed?.groups) {
+    throw new ParsingError('groups');
+  }
   const {
     groups: { company, ressources, rights },
-  } = URN_REGEX.exec(urn);
+  } = parsed;
   if (!company) {
     throw new ParsingError('company');
   }

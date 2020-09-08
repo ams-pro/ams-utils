@@ -1,4 +1,4 @@
-import { AMSParsedScope, parseURN } from './urn-parser';
+import { AMSParsedScope, parseURN, ParsingError } from './urn-parser';
 
 export class AccessController {
   private accessMap: Map<string, AMSParsedScope>;
@@ -17,26 +17,32 @@ export class AccessController {
       return false;
     }
 
-    const parsedRequest = parseURN(requestedScopes);
+    try {
+      const parsedRequest = parseURN(requestedScopes);
 
-    for (const module of parsedRequest.keys()) {
-      // 2. Überprüfe, ob jedes Modul verfügbar ist
-      if (!this.accessMap.has(module)) {
+      for (const module of parsedRequest.keys()) {
+        // 2. Überprüfe, ob jedes Modul verfügbar ist
+        if (!this.accessMap.has(module)) {
+          return false;
+        }
+
+        // 3. Überprüfe, ob alle Rechte innerhalb jedes Moduls verfügbar sind
+        const requestedRights = parsedRequest.get(module);
+
+        if (
+          !Object.keys(requestedRights).every(
+            (right) => this.accessMap.get(module)[right]
+          )
+        ) {
+          return false;
+        }
+      }
+    } catch (error) {
+      if (error instanceof ParsingError) {
         return false;
       }
-
-      // 3. Überprüfe, ob alle Rechte innerhalb jedes Moduls verfügbar sind
-      const requestedRights = parsedRequest.get(module);
-
-      if (
-        !Object.keys(requestedRights).every(
-          (right) => this.accessMap.get(module)[right]
-        )
-      ) {
-        return false;
-      }
+      throw error;
     }
-
     return true;
   }
 
